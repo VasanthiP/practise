@@ -1,0 +1,10 @@
+ExplicitTimeout = 100
+URL=https://int-dsp.cat.com/
+MonitoringURL=https://int-dsp-monitoring.azurewebsites.net/#!/systemmonitoring
+TimeOut=5
+BrowserName=Chrome
+Password1=Venkat@20Rao
+CatAdmin_USER=raosv
+CatAdmin_PASSWORD=Venkat@20Rao
+DealerAdmin_USER=kamarv1
+Dealer_PASSWORD=test

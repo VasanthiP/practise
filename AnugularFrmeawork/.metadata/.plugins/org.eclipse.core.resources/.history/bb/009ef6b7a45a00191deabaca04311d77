@@ -1,0 +1,10 @@
+package com.msys.angular.ui.stepdef;
+
+public class Login {
+	
+	@Given("^User Navigate to the application$")
+	public void user_Navigate_to_the_application() throws Throwable {
+	
+	}
+
+}

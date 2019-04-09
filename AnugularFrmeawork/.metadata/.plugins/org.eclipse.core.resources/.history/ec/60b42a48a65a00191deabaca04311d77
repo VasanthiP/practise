@@ -1,0 +1,23 @@
+package com.msys.angular.ui.stepdef;
+
+import com.msys.angular.ui.pageobjects.RegisterPO;
+
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+
+public class Register {
+	
+	RegisterPO register = new RegisterPO();
+	
+	@When("^User enter \"([^\"]*)\",\"([^\"]*)\",\"([^\"]*)\",\"([^\"]*)\" and click on RegisterButton$")
+	public void user_enter_and_click_on_RegisterButton(String arg1, String arg2, String arg3, String arg4) throws Throwable {
+	    
+	}
+
+	@Then("^Verify  \"([^\"]*)\"$")
+	public void verify(String strExpectedMessage) throws Throwable {
+	
+	}
+
+
+}

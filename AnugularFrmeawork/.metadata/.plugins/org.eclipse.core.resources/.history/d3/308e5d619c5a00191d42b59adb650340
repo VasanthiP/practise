@@ -1,0 +1,5 @@
+package com.msys.angular.ui.pageobjects;
+
+public class RegisterPO {
+
+}

@@ -1,0 +1,37 @@
+package com.msys.angular.ui.stepdef;
+
+import com.msys.angular.ui.helpers.Browser;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+
+public class Login extends Browser {
+	
+
+	public Login() throws Exception {
+		super();
+	}
+
+	@Given("^User Navigate to the application$")
+	public void user_Navigate_to_the_application() throws Throwable {
+	
+	}
+	
+	@When("^User click on \"([^\"]*)\" button$")
+	public void user_click_on_button(String arg1) throws Throwable {
+	   
+	}
+	
+	@When("^Uesr login with Registered Ccredentials \"([^\"]*)\",\"([^\"]*)\" and click on login button$")
+	public void uesr_login_with_Registered_Ccredentials_and_click_on_login_button(String arg1, String arg2) throws Throwable {
+	    
+	}
+	
+	@Then("^Verify Login is sucessful with \"([^\"]*)\" is displayed$")
+	public void verify_Login_is_sucessful_with_is_displayed(String arg1) throws Throwable {
+	   
+	}
+
+
+}

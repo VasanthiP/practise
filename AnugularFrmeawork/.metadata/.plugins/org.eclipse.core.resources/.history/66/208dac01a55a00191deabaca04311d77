@@ -1,0 +1,18 @@
+package com.msys.angular.ui.stepdef;
+
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.When;
+
+public class Login {
+	
+	@Given("^User Navigate to the application$")
+	public void user_Navigate_to_the_application() throws Throwable {
+	
+	}
+	
+	@When("^User click on \"([^\"]*)\" button$")
+	public void user_click_on_button(String arg1) throws Throwable {
+	   
+	}
+
+}

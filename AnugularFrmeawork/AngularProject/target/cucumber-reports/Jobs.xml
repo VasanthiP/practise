@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite failures="0" name="cucumber.runtime.formatter.JUnitFormatter" skipped="0" tests="1" time="11.144028">
+<testcase classname="Register Login" name="Verify the user is able to create a new account" time="11.144028">
+<system-out><![CDATA[Given User Navigate to the application......................................passed
+When User click on "Register" button........................................passed
+And User enter "Manoj1","kumar1","mano1","sanjay1" and click on RegisterButton.passed
+Then Verify  "Registration successful"......................................passed
+When Uesr login with Registered Credentials "mano1","sanjay1" and click on login button.passed
+Then Verify Login is sucessful with "You're logged in with Angular 6" is displayed.passed
+]]></system-out>
+</testcase>
+</testsuite>

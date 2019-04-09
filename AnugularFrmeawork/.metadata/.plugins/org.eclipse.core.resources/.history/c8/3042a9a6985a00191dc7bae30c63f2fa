@@ -1,0 +1,66 @@
+package com.msys.angular.ui.pageobjects;
+import cucumber.api.Scenario;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Properties;
+
+public class LoginPO {
+	
+	    public static Properties prop;
+	    @FindBy(name = "cwsUID")
+	    WebElement enterUserName;
+	    @FindBy(name = "cwsPwd")
+	    WebElement enterPassword;
+	    @FindBy(xpath = "//input[@id='submitButton']")
+	    WebElement btnSubmit;
+
+	    WebDriver driver;
+	    DSPUtility utility = new DSPUtility();
+	    Generic gen = new Generic();
+	    Wait wait = new Wait();
+
+	    Scenario scenario;
+
+	    public LoginPO() throws Exception {
+	        this.driver = Browser.driver;
+	        PageFactory.initElements(Browser.driver, this);
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     This function will login to Application
+	     * @throws InterruptedException
+	     ************************************************************************************************************************************************************************************************************************/
+	    public void LoginUser(String strUserType) throws CustomizedException, IOException, InterruptedException {
+	        String strUserName = null;
+	        String strPassword = null;
+	        Generic.waitForPageLoaded();
+	        if (Browser.intLoginCounter == 1) {
+	            if (strUserType.equalsIgnoreCase("CatAdmin")) {
+	                strUserName = Browser.prop.getProperty(strUserType + "_USER");
+	                strPassword = Browser.prop.getProperty(strUserType + "_PASSWORD");
+	            } else if (strUserType.equalsIgnoreCase("CatFactoryUser")) {
+	                strUserName = Browser.prop.getProperty("CatFactory_USER");
+	                strPassword = Browser.prop.getProperty("CatFactory_PASSWORD");
+	            }
+	            Generic.webEnter(enterUserName, strUserName);
+	            Generic.webEnter(enterPassword, strPassword);
+	            Wait.elementToBeClikable(btnSubmit);
+	            Generic.webClick(btnSubmit);
+	            Generic.waitForPageLoaded();
+	            utility.waitforProgressBarToDisappearLargeIcon();
+	        }
+	    }
+
+	
+	}
+
+
+
+}

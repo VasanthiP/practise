@@ -1,0 +1,58 @@
+package com.msys.angular.ui.pageobjects;
+import cucumber.api.Scenario;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Wait;
+
+import com.msys.angular.ui.helpers.Browser;
+import com.msys.angular.ui.helpers.Generic;
+import com.msys.angular.ui.helpers.Wait;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Properties;
+
+public class LoginPO {
+	
+	
+	    @FindBy(xpath = "//input[@formcontrolname='username']")
+	    WebElement enterUserName;
+	    @FindBy(name = "//input[@formcontrolname='password']")
+	    WebElement enterPassword;
+	    @FindBy(xpath = "")
+	    WebElement btnLogin;
+
+	    public static Properties prop;
+	    WebDriver driver;
+	    Scenario scenario;
+	    Generic gen = new Generic();
+	    Wait wai = new Wait();
+	  
+
+	    public LoginPO() throws Exception {
+	        this.driver = Browser.driver;
+	        PageFactory.initElements(Browser.driver, this);
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     This function will login to Application
+	     * @throws InterruptedException
+	     ************************************************************************************************************************************************************************************************************************/
+	    public void LoginUser() {
+	            Generic.webEnter(enterUserName, prop.getProperty("UserName"));
+	            Generic.webEnter(enterPassword, prop.getProperty("Password"));
+	            Wait.(btnLogin);
+	            Generic.webClick(btnLogin);
+	            Generic.waitForPageLoaded();
+	    }
+
+	
+	}
+
+
+

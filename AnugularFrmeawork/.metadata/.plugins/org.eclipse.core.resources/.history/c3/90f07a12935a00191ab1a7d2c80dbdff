@@ -1,0 +1,751 @@
+	package com.msys.angular.ui.helpers;
+
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.http.ParseException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.paulhammant.ngwebdriver.NgWebDriver;
+
+public class Generic {
+	
+
+
+	    public static WebDriver driver;
+	    public static NgWebDriver ngWebDriver;
+	    public static JavascriptExecutor executor;
+	    public static EventFiringWebDriver EventFiring;
+	    public static Actions actions;
+	    public static String strParentWindow;
+
+	    public Generic() {
+	        driver = Browser.driver;
+	        executor = (JavascriptExecutor) driver;
+	        ngWebDriver = new NgWebDriver(executor);
+	        ngWebDriver.waitForAngularRequestsToFinish();
+	        EventFiring = new EventFiringWebDriver(Browser.driver);
+	        actions = new Actions(Generic.driver);
+	    }
+
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : ele - element to which data to
+	     * be enter ,strTextValue - Value 'Purpose : Enter the value to the
+	     * particuar element 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void webEnter(WebElement ele, String strTextValue)
+	            throws CustomizedException, IOException {
+	        try {
+	            ele.clear();
+	            ele.sendKeys(strTextValue);
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Unable to enter the value: "
+	                    + strTextValue);
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : ele - element to be clicked
+	     * 'Purpose : Method to click the particular element 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void webClick(WebElement ele) throws CustomizedException {
+	        try {
+	            ele.click();
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Unable to click the element");
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : 'Purpose : Wait until the page
+	     * gets loaded 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void waitForPageLoaded() throws CustomizedException {
+	        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
+	            public Boolean apply(WebDriver driver) {
+	                return ((JavascriptExecutor) driver)
+	                        .executeScript("return document.readyState").toString()
+	                        .equals("complete");
+	            }
+	        };
+	        try {
+	            Thread.sleep(1000);
+	            WebDriverWait wait = new WebDriverWait(driver, 10);
+	            wait.until(expectation);
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : ele - element to be verified
+	     * 'Purpose : To verify the element is displayed or not 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static boolean isDisplayed(WebElement ele)
+	            throws CustomizedException {
+	        boolean blnDisplayStatus = false;
+	        try {
+	            if (ele.isDisplayed()) {
+	                blnDisplayStatus = true;
+	            }
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Element is not displayed");
+	        }
+	        return blnDisplayStatus;
+	    }
+
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : ele - element to be verified
+	     * 'Purpose : To verify the element is enabled or not 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static boolean isEnabled(WebElement ele)
+	            throws CustomizedException {
+	        boolean blnEnableStatus = false;
+	        try {
+	            if (ele.isEnabled()) {
+	                blnEnableStatus = true;
+	            }
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Element is not displayed");
+	        }
+	        return blnEnableStatus;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strPageTitle - the expected
+	     * title of the page 'Purpose : Verify the title of the page 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static boolean verifyTitle(String strPageTitle)
+	            throws CustomizedException {
+	        boolean bReturn = false;
+	        String actualTitle;
+	        try {
+	            actualTitle = getTitle();
+	            if (actualTitle.equals(strPageTitle)) {
+	                bReturn = true;
+	            } else {
+	                throw new CustomizedException("The expected page title " + "\""
+	                        + strPageTitle + "\"" + " Actual page title: " + "\""
+	                        + actualTitle + "\"" + " are not matched");
+	            }
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return bReturn;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : NA 'Purpose : Get page title
+	     * 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String getTitle() throws CustomizedException {
+	        String sReturn = "";
+	        try {
+	            sReturn = driver.getTitle();
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Unable to get the title");
+	        }
+	        return sReturn;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used :ele - element to which value to
+	     * be selected,strDropdownVisibleText - Visible Text to be selected in
+	     * dropdown as String 'Purpose :Select Visible Text in a dropdown 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void selectByVisibleText(WebElement ele, String strDropdownVisibleText) throws CustomizedException {
+	        try {
+	            Select selectDropDown = new Select(ele);
+	            selectDropDown.selectByVisibleText(strDropdownVisibleText);
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Item is not listed in the listbox: "
+	                    + strDropdownVisibleText);
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 20-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : ele - element to be clicked
+	     * 'Purpose : Method to click using JavaScriptExecutor
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void clickUsingJavaScriptExe(WebElement ele)
+	            throws CustomizedException {
+	        try {
+	            executor.executeScript("arguments[0].click();", ele);
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("unable to click the element");
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorId - ID 'Purpose : To
+	     * find the element by locator ID
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByID(String strlocatorId)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.id(strlocatorId));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorName - Name 'Purpose :
+	     * To find the element by locator Name 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByName(String strlocatorName)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.name(strlocatorName));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorClassName - ClassName
+	     * 'Purpose : To find the element by locator ClassName 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByClassName(String strlocatorClassName)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.className(strlocatorClassName));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorLinkText - linkedtext
+	     * 'Purpose : To find the element by locator linkedText 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByLinkText(String strlocatorLinkText)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.linkText(strlocatorLinkText));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorPartialLinkText
+	     * -partial linkedtext 'Purpose : To find the element by locator
+	     * locatorPartialLinkText 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByPartialLinkText(
+	            String strlocatorPartialLinkText) throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By
+	                    .partialLinkText(strlocatorPartialLinkText));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorTagName - TagName
+	     * 'Purpose : To find the element by locator TagName 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByTagname(String strlocatorTagName)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.tagName(strlocatorTagName));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorCSS - CSS value
+	     * 'Purpose : To find the element by locator CSS 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByCSS(String strlocatorCSS)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.cssSelector(strlocatorCSS));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strlocatorXpath - Xpath 'Purpose
+	     * : To find the element by locator Xpath 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static WebElement FindElementByXpath(String strlocatorXpath)
+	            throws CustomizedException {
+	        WebElement ele = null;
+	        try {
+	            ele = driver.findElement(By.xpath(strlocatorXpath));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return ele;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : NA 'Purpose : To Close the
+	     * browser 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+
+	    public static void closeBrowser() throws CustomizedException {
+	        try {
+	            driver.close();
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Unable to close the Browser");
+	        }
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : NA 'Purpose : To quit the
+	     * browser 'Steps: '
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void quitBrowser() throws CustomizedException {
+	        try {
+	            driver.quit();
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException("Unable to quit the Browser");
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : NA 'Purpose : To get the current
+	     * date and time 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String getCuttentTimeStamp() {
+	        Date date = new Date();
+	        SimpleDateFormat ft = new SimpleDateFormat("Eyyyy.MM.dd'_'hh:mm:ssa");
+	        return ft.format(date).replaceAll(":", "_");
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 19-Oct-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : strExpected - expected
+	     * values,strActual-actual Value 'Purpose : Compare two string values
+	     * 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static boolean compareStringValues(String strExpected,
+	                                              String strActual) {
+	        System.out.println("E:" + strExpected + "A: " + strActual);
+
+	        return strExpected.equalsIgnoreCase(strActual);
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 19-Oct-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : element - dropdown element
+	     * 'Purpose : get first selected value from drop down 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String getFirstSelectedOption(WebElement element)
+	            throws CustomizedException {
+	        try {
+	            Select selectDropDown = new Select(element);
+	            return selectDropDown.getFirstSelectedOption().getText();
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element "
+	                    + element);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(
+	                    "Item is not listed in the listbox: Element not selected");
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 08-Nov-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : 'Purpose : scroll particular
+	     * element down 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void scrollWebElementDown() throws CustomizedException {
+	        try {
+	            EventFiring
+	                    .executeScript("document.querySelector('#scroll').scrollTop=document.body.scrollHeight");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 08-Nov-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : 'Purpose : scroll particular
+	     * element UP 'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void scrollWebElementUp() throws CustomizedException {
+	        try {
+	            EventFiring
+	                    .executeScript("document.querySelector('#scroll').scrollTop=0");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 08-Nov-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : element- webelement 'Purpose :
+	     * click element using Action class 'Steps:
+	     *
+	     * @throws Exception
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void clickElementActions(WebElement element) throws Exception {
+	        try {
+	            actions.moveToElement(element);
+	            actions.click(element);
+	            actions.build().perform();
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element "
+	                    + element);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 08-Nov-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : element- webelement 'Purpose :
+	     * get Webelement text 'Steps:
+	     *
+	     * @throws Exception
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String getText(WebElement element) throws Exception {
+	        try {
+	            return element.getText();
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element "
+	                    + element);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    public static String getAttribute(WebElement element) throws Exception {
+	        try {
+	            return element.getAttribute("value");
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Element "
+	                    + element);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    public static void createFile(String content) throws Exception {
+	        String name = RandomStringUtils.randomAlphanumeric(16);
+	        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("FeatureNew//" + name + ".json"), StandardCharsets.UTF_8))) {
+	            writer.write(content);
+	        }
+	        JSONParser parser = new JSONParser();
+	        JSONArray jsonArray = (JSONArray) parser.parse(new FileReader("FeatureNew//" + name + ".json"));
+	        for (Object o : jsonArray) {
+	            JSONObject provisionHeader = (JSONObject) o;
+	            String strName = (String) provisionHeader.get("ItemsChanged");
+	            System.out.println("Header is:" + strName);
+	        }
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : kamarv1 'Created On : 08-Nov-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : xpath - element xpath 'Purpose :
+	     * find all elements 'Steps:
+	     *
+	     * @throws Exception
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static List<WebElement> findElementsByXpath(String xpath)
+	            throws Exception {
+	        try {
+	            return driver.findElements(By.xpath(xpath));
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Elements with "
+	                    + xpath);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     * 'Created By : vkamarv1 'Created On : 19-july-2018 'Last Updated By : NA
+	     * 'Last Updated On : NA 'Parameters Used : NA 'Purpose : To Parse the API
+	     * DateFormat
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String parseAPITimeFormat(String strValue)
+	            throws java.text.ParseException {
+	        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+	        Date result;
+	        String date = null;
+	        try {
+	            result = df.parse(strValue);
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	            date = sdf.format(result);
+	        } catch (ParseException e) {
+	            System.out.println(e.getMessage());
+	        }
+	        return date;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     'Created By			: vkamarv1
+	     'Created On			: 06-Mar-2019
+	     'Last Updated By	: NA
+	     'Last Updated On	: NA
+	     'Parameters Used	: ele(element of the dropdown)
+	     'Purpose			: To get the list of the dropdown
+	     'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static String getDropDownValues(WebElement ele) throws CustomizedException {
+	        String strOptions = "";
+	        try {
+	            Select listbox = new Select(ele);
+	            List<WebElement> options = listbox.getOptions();
+	            for (WebElement value : options) {
+	                strOptions = strOptions + "," + value.getText();
+	            }
+	        } catch (NoSuchElementException e) {
+	            throw new CustomizedException("Failed to find the Elements " + ele);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+	        return strOptions;
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     'Created By			: vkamarv1
+	     'Created On			: 06-Mar-2019
+	     'Last Updated By	: NA
+	     'Last Updated On	: NA
+	     'Parameters Used	: strExpectedValue(ExpectedValue),strActualValue(ActualValue)
+	     'Purpose			: to check the the expected value is present or not
+	     'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static boolean isContains(String strExpectedValue, String strActualValue) {
+	        return strExpectedValue.contains(strActualValue);
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     'Created By			: vkamarv1
+	     'Created On			: 06-Mar-2019
+	     'Last Updated By	: NA
+	     'Last Updated On	: NA
+	     'Parameters Used	: NA
+	     'Purpose			: to get the parent window Name
+	     'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void getParentWindow() throws CustomizedException {
+	        try {
+	            strParentWindow = driver.getWindowHandle();
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     'Created By			: vkamarv1
+	     'Created On			: 06-Mar-2019
+	     'Last Updated By	: NA
+	     'Last Updated On	: NA
+	     'Parameters Used	: NA
+	     'Purpose			: to move to the child window
+	     'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+	    public static void switchtoChildWindow() throws CustomizedException {
+
+	        try {
+	            for (String winHandle : driver.getWindowHandles()) {
+	                driver.switchTo().window(winHandle);
+	            }
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     'Created By			: vkamarv1
+	     'Created On			: 06-Mar-2019
+	     'Last Updated By	: NA
+	     'Last Updated On	: NA
+	     'Parameters Used	: NA
+	     'Purpose			: to move to the parent window
+	     'Steps:
+	     ************************************************************************************************************************************************************************************************************************/
+
+	    public static void switchtoParentWindow() throws CustomizedException {
+	        try {
+	            driver.switchTo().window(strParentWindow);
+	        } catch (WebDriverException e) {
+	            throw new CustomizedException(
+	                    "The browser is not available for unknown reason.");
+	        } catch (Exception e) {
+	            throw new CustomizedException(e.getMessage());
+	        }
+
+	    }
+
+
+	}
+
+

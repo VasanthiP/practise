@@ -1,0 +1,5 @@
+package com.msys.angular.ui.helpers;
+
+public class Wait {
+
+}

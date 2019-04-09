@@ -1,0 +1,60 @@
+package com.msys.angular.ui.pageobjects;
+import cucumber.api.Scenario;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Wait;
+
+import com.msys.angular.ui.helpers.Browser;
+import com.msys.angular.ui.helpers.Generic;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.Properties;
+
+public class LoginPO {
+	
+	    public static Properties prop;
+	    @FindBy(xpath = "//input[@formcontrolname='username']")
+	    WebElement enterUserName;
+	    @FindBy(name = "//input[@formcontrolname='password']")
+	    WebElement enterPassword;
+	    @FindBy(xpath = "")
+	    WebElement btnLogin;
+
+	    WebDriver driver;
+	    Generic gen = new Generic();
+	  
+		Wait wait = new Wait();
+
+	    Scenario scenario;
+
+	    public LoginPO() throws Exception {
+	        this.driver = Browser.driver;
+	        PageFactory.initElements(Browser.driver, this);
+
+	    }
+
+	    /*******************************************************************************************************************************************************************************************************************
+	     This function will login to Application
+	     * @throws InterruptedException
+	     ************************************************************************************************************************************************************************************************************************/
+	    public void LoginUser() throws CustomizedException, IOException, InterruptedException {
+	            Generic.webEnter(enterUserName, strUserName);
+	            Generic.webEnter(enterPassword, strPassword);
+	            Wait.elementToBeClikable(btnSubmit);
+	            Generic.webClick(btnLogin);
+	            Generic.waitForPageLoaded();
+	            utility.waitforProgressBarToDisappearLargeIcon();
+	        }
+	    }
+
+	
+	}
+
+
+
+}

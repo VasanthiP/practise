@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="13819" started-at="2019-04-09T11:17:12Z" finished-at="2019-04-09T11:17:26Z">
+    <groups>
+      <group name="cucumber">
+        <method signature="TestRunner.feature(cucumber.api.testng.CucumberFeatureWrapper)[pri:0, instance:com.msys.angular.ui.TestRunner.TestRunner@26a7b76d]" name="feature" class="com.msys.angular.ui.TestRunner.TestRunner"/>
+      </group> <!-- cucumber -->
+    </groups>
+    <test name="Default test" duration-ms="13819" started-at="2019-04-09T11:17:12Z" finished-at="2019-04-09T11:17:26Z">
+      <class name="com.msys.angular.ui.TestRunner.TestRunner">
+        <test-method status="PASS" signature="setUpClass()[pri:0, instance:com.msys.angular.ui.TestRunner.TestRunner@26a7b76d]" name="setUpClass" is-config="true" duration-ms="1257" started-at="2019-04-09T16:47:12Z" finished-at="2019-04-09T16:47:13Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUpClass -->
+        <test-method status="PASS" signature="feature(cucumber.api.testng.CucumberFeatureWrapper)[pri:0, instance:com.msys.angular.ui.TestRunner.TestRunner@26a7b76d]" name="feature" duration-ms="11676" started-at="2019-04-09T16:47:14Z" description="Runs Cucumber Feature" data-provider="features" finished-at="2019-04-09T16:47:25Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[Register Login]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- feature -->
+        <test-method status="PASS" signature="tearDownClass()[pri:0, instance:com.msys.angular.ui.TestRunner.TestRunner@26a7b76d]" name="tearDownClass" is-config="true" duration-ms="661" started-at="2019-04-09T16:47:25Z" finished-at="2019-04-09T16:47:26Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDownClass -->
+      </class> <!-- com.msys.angular.ui.TestRunner.TestRunner -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

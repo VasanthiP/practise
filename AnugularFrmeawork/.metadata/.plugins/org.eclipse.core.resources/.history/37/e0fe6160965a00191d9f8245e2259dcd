@@ -1,0 +1,143 @@
+package com.msys.angular.ui.helpers;
+
+import cucumber.api.Scenario;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.SessionId;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+public class Browser {
+	
+		public static WebDriver driver;
+		public static int timeout;
+		public static Properties prop;
+		public static String UserID;
+		public static String Password;
+		public static SessionId session;
+		public static String strDriverValue;
+		public static int intLoginCounter = 0;
+		public static Scenario sc;
+		public static JavascriptExecutor executor;
+	
+		/*******************************************************************************************************************************************************************************************************************
+		'Created By			: vkamarv1						
+	    'Created On			: 09-April-2019				
+	    'Last Updated By	: NA
+	    'Last Updated On	: NA
+	    'Parameters Used	: NA
+	    'Purpose			: To Launch the browser
+	    'Steps:
+		 ************************************************************************************************************************************************************************************************************************/
+		public Browser() throws Exception {
+			intLoginCounter = intLoginCounter + 1;
+			if (!(driver == null)) {
+				if (!(driver.toString() == null)) {
+					strDriverValue = driver.toString();
+				} else {
+					strDriverValue = "";
+				}
+			}
+			if (driver == null || strDriverValue.contains("null")) {
+				Browser.LoadConfigFile(); // Load the Config file
+				Browser.SetSystemProperty(); // Launch the browser
+				try {
+					timeout = Integer.parseInt(prop.getProperty("TimeOut"));
+					driver.get(prop.getProperty("URL"));
+					driver.manage().window().maximize();
+					driver.manage().timeouts().implicitlyWait(timeout, TimeUnit.SECONDS);
+
+				} catch (Exception e) {
+					throw new CustomizedException(e.getLocalizedMessage());
+				}
+			}
+		}
+
+		/*******************************************************************************************************************************************************************************************************************
+	    'Created By			: vkamarv1						
+	    'Created On			: 09-April-2019					
+	    'Last Updated By	: NA
+	    'Last Updated On	: NA
+	    'Parameters Used	: NA
+	    'Purpose			: To load the config file
+	    'Steps:
+		 *************************************************************************************************************************************************************************************************************************/
+		public static Properties LoadConfigFile() {
+			try {
+				File file = new File(
+						System.getProperty("user.dir") + "\\src\\test\\java\\com\\msys\\dsp\\ui\\config\\UI.properties");
+				FileInputStream fileInput = new FileInputStream(file);
+				prop = new Properties();
+				prop.load(fileInput);
+				return prop;
+			} catch (IOException e) {
+				throw new RuntimeException("Couldn't load Properties", e);
+			}
+		}
+
+		/*******************************************************************************************************************************************************************************************************************
+		'Created By			: vkamarv1						
+	    'Created On			: 09-April-2019					
+	    'Last Updated By	: NA
+	    'Last Updated On	: NA
+	    'Parameters Used	: NA
+	    'Purpose			: To set system property for browser
+	    'Steps:
+		 *************************************************************************************************************************************************************************************************************************/
+		public static void SetSystemProperty() throws Exception {
+			String browserName = prop.getProperty("BrowserName");
+			switch (browserName) {
+			case "Chrome":
+				DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+				ChromeOptions options = new ChromeOptions();
+				options.addArguments("disable-infobars");
+				capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+				capabilities.setJavascriptEnabled(true);
+				System.setProperty("webdriver.chrome.driver",
+						System.getProperty("user.dir") + "\\src\\UI\\java\\com\\cat\\dsp\\ui\\resources\\chromedriver.exe");
+				driver = new ChromeDriver(capabilities);
+				break;
+			case "Firefox":
+				driver = new FirefoxDriver();
+				break;
+			case "IExplorer":
+				DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
+				ieCapabilities.setCapability(CapabilityType.BROWSER_NAME, "IE");
+				ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+				ieCapabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+				ieCapabilities.setCapability(InternetExplorerDriver.ENABLE_ELEMENT_CACHE_CLEANUP, true);
+				System.setProperty("webdriver.ie.driver",
+	                    System.getProperty("user.dir") + "\\src\\UI\\java\\com\\cat\\dsp\\ui\\resources\\IEDriverServer.exe");
+				driver = new InternetExplorerDriver(ieCapabilities);
+				break;
+			}
+		}
+
+		/*******************************************************************************************************************************************************************************************************************
+	    'Created By			: vkamarv1						
+	    'Created On			: 09-April-2019				
+	    'Last Updated By	: NA
+	    'Last Updated On	: NA
+	    'Parameters Used	: decryptedPassword(passord)
+	    'Purpose			: To decrypt password
+	    'Steps:
+		 *************************************************************************************************************************************************************************************************************************/
+		public static String LoginDecrytedPassword(String decryptedPassword) {
+			byte[] decryptedPasswordBytes = Base64.getDecoder().decode(decryptedPassword);
+			return new String(decryptedPasswordBytes).trim();
+		}
+
+	}
+
+

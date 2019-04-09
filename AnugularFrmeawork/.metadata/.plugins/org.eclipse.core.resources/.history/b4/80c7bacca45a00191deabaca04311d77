@@ -1,0 +1,12 @@
+package com.msys.angular.ui.stepdef;
+
+import cucumber.api.java.en.Given;
+
+public class Login {
+	
+	@Given("^User Navigate to the application$")
+	public void user_Navigate_to_the_application() throws Throwable {
+	
+	}
+
+}

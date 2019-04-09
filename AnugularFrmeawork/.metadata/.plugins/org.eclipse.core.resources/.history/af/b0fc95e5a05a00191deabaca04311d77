@@ -1,0 +1,15 @@
+
+Feature: Register Login
+
+  @Positive @UI
+  Scenario Outline: Verify the user is able to Create a new account
+    Given User logged into the application
+    When User click on "Register" button
+    And User enter "<FirstName>","<LastName>","<UserName>","<Password>" and click on RegisterButton
+    Then Verify  "Registration successful"
+    When Enter "<UserName>","<Password>" and click on login button
+    Then Verify Login is sucessful "<>"
+   
+    Examples:
+      | FirstName | deviceType | dropdownValue | Type     | ucidNumber | dcnNumber |
+      | CFV00807     | PL671      | EAP_TLS       | CatAdmin |            |           |
